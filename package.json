@@ -1,0 +1,25 @@
+{
+  "name": "beca-cin-app",
+  "version": "1.0.0",
+  "description": "Implementation of the architecture for the integration of web accessibility testing tools",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicostreri/Beca-CIN-App.git"
+  },
+  "keywords": [
+    "accessibility",
+    "tools",
+    "integration",
+    "webapps"
+  ],
+  "author": "Nicolás Streri <nicolas@streri.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicostreri/Beca-CIN-App/issues"
+  },
+  "homepage": "https://github.com/nicostreri/Beca-CIN-App#readme"
+}
