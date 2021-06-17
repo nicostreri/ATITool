@@ -1,9 +1,13 @@
 {
   "name": "beca-cin-app",
   "version": "1.0.0",
+  "bin": {
+    "myapp": "./bin/myapp.js"
+  },
   "description": "Implementation of the architecture for the integration of web accessibility testing tools",
   "main": "src/app.js",
   "scripts": {
+    "start": "node ./bin/myapp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
