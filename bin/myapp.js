@@ -60,9 +60,9 @@ async function runApp(options) {
     .run(options.url, options.standard, {
       reporter: cliReport,
     })
-    .then(buildTypeFilter(options.notice, "notice"))
-    .then(buildTypeFilter(options.warning, "warning"))
-    .then(buildTypeFilter(options.error, "error"))
+    .then(buildTypeFilter(!options.notice, "notice"))
+    .then(buildTypeFilter(!options.warning, "warning"))
+    .then(buildTypeFilter(!options.error, "error"))
     .then(cliReport.reportFrom)
     .catch((err) => {
       cliReport.reportError(err.message);
