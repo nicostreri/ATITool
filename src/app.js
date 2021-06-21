@@ -21,7 +21,7 @@ async function run(website, standard, options) {
   for (i in compatibleRunners) {
     const runner = compatibleRunners[i];
     options.reporter.reportInfo(`Running ${runner.name || "unamed"} runner`);
-    const runnerResults = await runner.run(website, options);
+    const runnerResults = await runner.run(website, standard, options);
     allRunnersResults.push(runnerResults);
   }
   return mergeResult(allRunnersResults);
