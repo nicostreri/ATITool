@@ -32,10 +32,12 @@ function execPromise(command) {
   });
 }
 
-async function runHTMLToJSON(website, options) {
+async function runHTMLToJSON(website, standard, options) {
   let result;
   try {
-    result = JSON.parse(await execPromise(`htmlcsToJSON -u ${website}`));
+    result = JSON.parse(
+      await execPromise(`htmlcsToJSON -u ${website} -s ${standard}`)
+    );
   } catch (e) {
     throw new Error(
       `HTMLCodeSniffer reporter: htmlcsToJSON execution fails (${e.message})`
@@ -51,10 +53,15 @@ async function runHTMLToJSON(website, options) {
 /**
  *
  * @param {String} website URL to analyze
+ * @param {String} standard Standard to apply
  * @param {Any} options Currently unused
  * @returns {Array} Array of standard results obtained by HTML Code Sniffer
  */
-async function run(website, options) {
-  const specificResults = await runHTMLToJSON(website, options);
+async function run(website, standard, options) {
+  if (!this.allowedStandards.includes(standard))
+    throw new Error(
+      `HTML CodeSniffer runner, unsupported standard: ${standard}`
+    );
+  const specificResults = await runHTMLToJSON(website, standard, options);
   return htmlcsTransformer.convert(specificResults);
 }

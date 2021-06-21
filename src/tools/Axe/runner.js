@@ -4,9 +4,17 @@ const which = require("which");
 const axeTransformer = require("./transformer");
 
 exports.name = "Axe";
-exports.allowedStandards = ["Section508", "WCAG2A", "WCAG2AA", "WCAG2AAA"];
+// prettier-ignore
+exports.allowedStandards = Object.freeze(["Section508", "WCAG2A", "WCAG2AA", "WCAG2AAA"]);
 exports.checkDependencies = checkDependencies;
 exports.run = run;
+
+const standardToTagsMap = {
+  Section508: "section508,best-practice",
+  WCAG2A: "wcag2a,wcag21a,best-practice",
+  WCAG2AA: "wcag2a,wcag21a,wcag2aa,wcag21aa,best-practice",
+  WCAG2AAA: "wcag2a,wcag21a,wcag2aa,wcag21aa,best-practice",
+};
 
 /**
  * Check if all dependencies are satisfied
@@ -43,10 +51,16 @@ function spawnPromise(command, args) {
   });
 }
 
-async function runAxe(website, options) {
+async function runAxe(website, standard, options) {
   try {
     return JSON.parse(
-      await spawnPromise("axe", [website, "--show-errors", "-j"])
+      await spawnPromise("axe", [
+        website,
+        "--show-errors",
+        "-j",
+        "--tags",
+        standardToTagsMap[standard],
+      ])
     );
   } catch (e) {
     throw new Error(`Axe reporter: axe execution fails (${e.message})`);
@@ -55,11 +69,14 @@ async function runAxe(website, options) {
 
 /**
  *
- * @param {String} website URL to analyze
+ * @param {String} website URL to analyze.
+ * @param {String} standard Standard to apply
  * @param {Any} options Currently unused
  * @returns {Array} Array of standard results obtained by Axe
  */
-async function run(website, options) {
-  const specificResults = await runAxe(website, options);
+async function run(website, standard, options) {
+  if (!this.allowedStandards.includes(standard))
+    throw new Error(`Axe runner, unsupported standard: ${standard}`);
+  const specificResults = await runAxe(website, standard, options);
   return axeTransformer.convert(specificResults);
 }
