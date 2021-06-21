@@ -3,8 +3,9 @@
  * Note: When integrating a new accessibility testing tool, add export to this file.
  */
 const htmlcsRunner = require("./HTMLCodeSniffer/runner");
+const axeRunner = require("./Axe/runner");
 
-exports.list = [htmlcsRunner];
+exports.list = [htmlcsRunner, axeRunner];
 exports.compatibleWith = compatibleWith;
 
 /**
