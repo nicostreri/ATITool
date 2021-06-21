@@ -16,13 +16,25 @@ async function run(website, standard, options) {
   if (compatibleRunners.length == 0)
     throw new Error(`No runners found compatible with ${standard}`);
 
+  options.reporter.reportInfo(
+    `Found ${compatibleRunners.length} runners: [${compatibleRunners
+      .map((runner) => {
+        return runner.name || "unamed";
+      })
+      .join(", ")}]`
+  );
+
   let allRunnersResults = [];
-  let i;
-  for (i in compatibleRunners) {
-    const runner = compatibleRunners[i];
+  for (const runner of compatibleRunners) {
     options.reporter.reportInfo(`Running ${runner.name || "unamed"} runner`);
-    const runnerResults = await runner.run(website, standard, options);
-    allRunnersResults.push(runnerResults);
+    try {
+      const runnerResults = await runner.run(website, standard, options);
+      allRunnersResults.push(runnerResults);
+    } catch (error) {
+      options.reporter.reportError(
+        `The execution of ${runner.name} failed, ignoring its results.`
+      );
+    }
   }
   return mergeResult(allRunnersResults);
 }
