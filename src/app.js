@@ -33,7 +33,7 @@ async function run(website, standard, options) {
       allRunnersResults.push(runnerResults);
     } catch (error) {
       options.reporter.reportError(
-        `The execution of ${runner.name} failed, ignoring its results.`
+        `The execution of ${runner.name} failed, ignoring its results. ${error.message}`
       );
     }
   }
