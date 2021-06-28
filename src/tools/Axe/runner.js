@@ -78,5 +78,5 @@ async function run(website, standard, options) {
   if (!this.allowedStandards.includes(standard))
     throw new Error(`Axe runner, unsupported standard: ${standard}`);
   const specificResults = await runAxe(website, standard, options);
-  return axeTransformer.convert(specificResults);
+  return axeTransformer.convert(specificResults, standard);
 }
