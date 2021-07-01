@@ -24,11 +24,8 @@ function reportFrom(results) {
   }
   console.log(chalk.yellow("Accessibility issues were found:"));
   results.forEach((result) => {
-    console.log(
-      `${typeMap[result.type](
-        result.type.toUpperCase() + " " + result.code
-      )}: ${result.message}. In ${result.element}`
-    );
+    // prettier-ignore
+    console.log(`${typeMap[result.type](result.type.toUpperCase() + " " + result.code)}: \n\t${result.message}.\n\tIn ${result.element}`);
   });
 }
 
