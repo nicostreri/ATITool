@@ -1,5 +1,6 @@
 "use strict";
 const runners = require("./tools/index");
+const _ = require("lodash");
 
 exports.run = run;
 exports.saveResults = saveResults;
@@ -41,19 +42,43 @@ async function run(website, standard, options) {
 }
 
 /**
+ * Calculate the highest between type1 and type2
+ * Using the following order: notice <= warning <= error
+ * @param {String} type1
+ * @param {String} type2
+ * @returns {String} The highest
+ */
+function highestType(type1, type2) {
+  const typeOrder = ["notice", "warning", "error"];
+  return typeOrder.indexOf(type1) <= typeOrder.indexOf(type2) ? type2 : type1;
+}
+
+/**
  * Group, order and remove repeated results
  * @param {Result[][]} results Accessibility results array obtained
  * @returns Definitive standard results
  */
 function mergeResult(results) {
-  let finalResults = [];
-  let i;
-  for (i in results) {
-    //TODO No implement
-    const runnerResults = results[i];
-    finalResults = finalResults.concat(runnerResults);
-  }
-  return finalResults;
+  //Join a group of results with the same code
+  const joinRelatedResults = (accum, current) => {
+    accum.code = current.code;
+    if (!accum.message.includes(current.message))
+      accum.message += `${current.message}\n`;
+    accum.element.push(current.element); //TODO: Remove repetitions
+    accum.type = highestType(accum.type, current.type);
+    return accum;
+  };
+
+  return _.values(_.groupBy(_.flatten(results), "code")).map(
+    (relatedResults) => {
+      return relatedResults.reduce(joinRelatedResults, {
+        code: "",
+        element: [],
+        message: "",
+        type: "notice",
+      });
+    }
+  );
 }
 
 function saveResults() {
