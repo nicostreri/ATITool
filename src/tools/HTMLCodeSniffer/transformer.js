@@ -8,7 +8,6 @@ const typeIssueMap = {
 };
 
 function mapCodeToStandardCode(hcode) {
-  //TODO Reimplement it after analysing the standard code format.
   return hcode;
 }
 
