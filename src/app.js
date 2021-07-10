@@ -43,7 +43,7 @@ async function run(website, standard, options) {
 
 /**
  * Calculate the highest between type1 and type2
- * Using the following order: notice <= warning <= error
+ * Using the following order: notice < warning < error
  * @param {String} type1
  * @param {String} type2
  * @returns {String} The highest
