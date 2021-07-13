@@ -29,7 +29,7 @@ async function run(website, standard, options) {
   for (const runner of compatibleRunners) {
     options.reporter.reportInfo(`Running ${runner.name || "unamed"} runner`);
     try {
-      await runner.checkDependencies();
+      await runner.checkDependencies(options);
       const runnerResults = await runner.run(website, standard, options);
       allRunnersResults.push(runnerResults);
     } catch (error) {

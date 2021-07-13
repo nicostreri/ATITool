@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 "use strict";
+const fs = require("fs");
+const path = require("path");
 const app = require("../src/app");
 const cliReport = require("../src/reporters/CLIReport");
 const { Command } = require("commander");
@@ -38,6 +40,21 @@ function analyzeArguments() {
   return program.opts();
 }
 
+function loadConfigurations() {
+  const configFolder = path.join(__dirname, "..", "config");
+  let configurations = {};
+  for (const file of fs.readdirSync(configFolder)) {
+    try {
+      const jsonString = fs.readFileSync(path.join(configFolder, file));
+      const jsonData = JSON.parse(jsonString);
+      configurations[file.replace(".json", "")] = jsonData;
+    } catch (err) {
+      throw new Error(`Configuration reading failed: ${e.message}`);
+    }
+  }
+  return configurations;
+}
+
 function buildTypeFilter(enable, typeToFilter) {
   if (enable) {
     return (results) => {
@@ -59,6 +76,7 @@ async function runApp(options) {
   app
     .run(options.url, options.standard, {
       reporter: cliReport,
+      config: loadConfigurations(),
     })
     .then(buildTypeFilter(!options.notice, "notice"))
     .then(buildTypeFilter(!options.warning, "warning"))
