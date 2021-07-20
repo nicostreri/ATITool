@@ -2,7 +2,6 @@
 const runners = require("./tools/index");
 const puppeteer = require("puppeteer");
 const _ = require("lodash");
-const { option } = require("commander");
 
 exports.run = run;
 exports.saveResults = saveResults;
