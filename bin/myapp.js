@@ -40,7 +40,7 @@ function analyzeArguments() {
   return program.opts();
 }
 
-function loadConfigurations() {
+async function loadConfigurations() {
   const configFolder = path.join(__dirname, "..", "config");
   let configurations = {};
   for (const file of fs.readdirSync(configFolder)) {
@@ -48,8 +48,8 @@ function loadConfigurations() {
       const jsonString = fs.readFileSync(path.join(configFolder, file));
       const jsonData = JSON.parse(jsonString);
       configurations[file.replace(".json", "")] = jsonData;
-    } catch (err) {
-      throw new Error(`Configuration reading failed: ${e.message}`);
+    } catch (e) {
+      throw new Error(`Configuration reading failed: ${e}`);
     }
   }
   return configurations;
@@ -73,10 +73,12 @@ function buildTypeFilter(enable, typeToFilter) {
  * Run the accessibility test on the page and generate the results
  */
 async function runApp(options) {
-  app
-    .run(options.url, options.standard, {
-      reporter: cliReport,
-      config: loadConfigurations(),
+  loadConfigurations()
+    .then((configurations) => {
+      return app.run(options.url, options.standard, {
+        reporter: cliReport,
+        config: configurations,
+      });
     })
     .then(buildTypeFilter(!options.notice, "notice"))
     .then(buildTypeFilter(!options.warning, "warning"))
