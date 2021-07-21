@@ -27,6 +27,13 @@ function convertIssues(issuesObject, type, standard) {
  * @returns {Array} Array of standard results
  */
 function convert(waveResults, standard) {
+  if (!waveResults.status) throw new Error("Invalid WAVE API response");
+  if (!waveResults.status.success) {
+    throw new Error(
+      `Accessibility analysis failed, returned from API: ${waveResults.status.error}`
+    );
+  }
+
   return [
     ...convertIssues(waveResults.categories.error, "error", standard),
     ...convertIssues(waveResults.categories.contrast, "error", standard),
