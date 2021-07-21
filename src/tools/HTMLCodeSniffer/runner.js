@@ -40,7 +40,7 @@ async function runHTMLToJSON(website, standard, options) {
     );
   } catch (e) {
     throw new Error(
-      `HTMLCodeSniffer reporter: htmlcsToJSON execution fails (${e.message})`
+      `HTMLCodeSniffer reporter: htmlcsToJSON execution fails (${e})`
     );
   }
   if (result.status != "ok")
