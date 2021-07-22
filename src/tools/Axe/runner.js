@@ -63,7 +63,7 @@ async function runAxe(website, standard, options) {
       ])
     );
   } catch (e) {
-    throw new Error(`Axe reporter: axe execution fails (${e.message})`);
+    throw new Error(`Axe reporter: axe execution fails (${e})`);
   }
 }
 

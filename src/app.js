@@ -2,7 +2,6 @@
 const runners = require("./tools/index");
 const puppeteer = require("puppeteer");
 const _ = require("lodash");
-const { option } = require("commander");
 
 exports.run = run;
 exports.saveResults = saveResults;
@@ -36,7 +35,7 @@ async function run(website, standard, options) {
       allRunnersResults.push(runnerResults);
     } catch (error) {
       options.reporter.reportError(
-        `The execution of ${runner.name} failed, ignoring its results. ${error.message}`
+        `The execution of ${runner.name} failed, ignoring its results. ${error}`
       );
     }
   }
@@ -62,7 +61,10 @@ function highestType(type1, type2) {
  * @param {Any} options Internal options
  * @returns The standard result without element repetitions.
  */
-async function removeRepeatingElements(standardResult, options) {
+async function removeRepeatingElementsFromStandardResult(
+  standardResult,
+  options
+) {
   return options.render.page.evaluate((result) => {
     let elementsSet = new Set();
     let uniqueSelectors = [];
@@ -139,6 +141,19 @@ function combineStandardResults(results) {
   });
 }
 
+async function checkAndRemoveRepeatingElements(website, results, options) {
+  await renderWebsite(website, options);
+
+  let resultsWithoutRepeatingElements = [];
+  for (const result of results) {
+    resultsWithoutRepeatingElements.push(
+      await removeRepeatingElementsFromStandardResult(result, options)
+    );
+  }
+  await closeWebsite(options);
+  return resultsWithoutRepeatingElements;
+}
+
 /**
  * Group, order and remove repeated results
  * @param {String} website WebSite url
@@ -150,15 +165,18 @@ async function mergeResult(website, results, options) {
     _.groupBy(_.flatten(results), "code")
   ).map(combineStandardResults);
 
-  await renderWebsite(website, options);
-  let resultsWithoutRepeatingElements = [];
-  for (const result of resultsWithRepeatingElements) {
-    resultsWithoutRepeatingElements.push(
-      await removeRepeatingElements(result, options)
+  try {
+    return await checkAndRemoveRepeatingElements(
+      website,
+      resultsWithRepeatingElements,
+      options
     );
+  } catch (e) {
+    options.reporter.reportError(
+      "Rendering error, skipping the removal of repeating elements."
+    );
+    return resultsWithRepeatingElements;
   }
-  await closeWebsite(options);
-  return resultsWithoutRepeatingElements;
 }
 
 function saveResults() {
