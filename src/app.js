@@ -90,7 +90,10 @@ async function removeRepeatingElementsFromStandardResult(
  * @param {Any} options Internal options, will modify it.
  */
 async function renderWebsite(url, options) {
-  const browser = await puppeteer.launch({ dumpio: false });
+  const browser = await puppeteer.launch({
+    dumpio: false,
+    args: ["--no-sandbox"],
+  });
   const page = await browser.newPage();
   await page.goto(url, {
     waitUntil: "networkidle2",

@@ -56,6 +56,7 @@ async function runAxe(website, standard, options) {
     return JSON.parse(
       await spawnPromise("axe", [
         website,
+        "--chrome-options=no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage",
         "--show-errors",
         "-j",
         "--tags",
