@@ -1,6 +1,7 @@
 "use strict";
 const chalk = require("chalk");
 
+exports.name = "CLI";
 exports.reportFrom = reportFrom;
 exports.reportError = error;
 exports.reportWarning = warning;

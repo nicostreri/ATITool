@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const app = require("../src/app");
-const cliReport = require("../src/reporters/CLIReport");
+const reporters = require("../src/reporters/index");
 const { Command } = require("commander");
 
 const invocationOptions = analyzeArguments();
@@ -22,6 +22,11 @@ function analyzeArguments() {
       "-s, --standard <standard>",
       "Standard to analyze: Section508, WCAG2A, WCAG2AA, WCAG2AAA",
       "WCAG2AA"
+    )
+    .option(
+      "-r, --reporter <reporter name>",
+      "Reporter to use as output: CLI, JSON",
+      "CLI"
     )
     .option(
       "--no-notice",
@@ -73,18 +78,24 @@ function buildTypeFilter(enable, typeToFilter) {
  * Run the accessibility test on the page and generate the results
  */
 async function runApp(options) {
-  loadConfigurations()
+  let reporter = reporters.getReporter(options.reporter);
+  if (reporter == null) {
+    console.error("Critical Error: Reporter Not found");
+    return;
+  }
+
+  return loadConfigurations()
     .then((configurations) => {
       return app.run(options.url, options.standard, {
-        reporter: cliReport,
+        reporter: reporter,
         config: configurations,
       });
     })
     .then(buildTypeFilter(!options.notice, "notice"))
     .then(buildTypeFilter(!options.warning, "warning"))
     .then(buildTypeFilter(!options.error, "error"))
-    .then(cliReport.reportFrom)
+    .then(reporter.reportFrom)
     .catch((err) => {
-      cliReport.reportError(err.message);
+      reporter.reportError(err.message);
     });
 }
