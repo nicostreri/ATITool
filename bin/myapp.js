@@ -94,7 +94,9 @@ async function runApp(options) {
     .then(buildTypeFilter(!options.notice, "notice"))
     .then(buildTypeFilter(!options.warning, "warning"))
     .then(buildTypeFilter(!options.error, "error"))
-    .then(reporter.reportFrom)
+    .then((results) => {
+      reporter.reportFrom(results, options);
+    })
     .catch((err) => {
       reporter.reportError(err.message);
     });

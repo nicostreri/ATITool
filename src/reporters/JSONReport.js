@@ -14,9 +14,10 @@ let output = {
 /**
  * Prints accesibility results on the CLI in JSON Format
  * @param {Array} results Array of accesibility results
+ * @param {Any} options
  * @returns {void}
  */
-function reportFrom(results) {
+function reportFrom(results, options) {
   output.results = results;
   console.log(JSON.stringify(output));
   output = {

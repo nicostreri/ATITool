@@ -4,8 +4,9 @@
  */
 const cliReporter = require("./CLIReport");
 const jsonReporter = require("./JSONReport");
+const htmlReporter = require("./HTMLReport");
 
-exports.list = [cliReporter, jsonReporter];
+exports.list = [cliReporter, jsonReporter, htmlReporter];
 exports.getReporter = getReporter;
 
 /**
