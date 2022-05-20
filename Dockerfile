@@ -19,13 +19,13 @@ COPY package*.json ./
 RUN npm install
 
 ## Downgrade Chrome for aXe compatibility
-ENV CHROME_VERSION=90.0.4430.212-1
+ENV CHROME_VERSION=101.0.4951.64-1
 RUN wget --no-check-certificate https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb
 RUN dpkg -i google-chrome-stable_${CHROME_VERSION}_amd64.deb || apt -y -f install
 RUN rm google-chrome-stable_${CHROME_VERSION}_amd64.deb;
 
 ## Install aXe
-RUN npm install @axe-core/cli -g --unsafe-perm=true
+RUN npm install @axe-core/cli@4.4.2 -g --unsafe-perm=true
 
 # Copy the source code of the app
 COPY . .
