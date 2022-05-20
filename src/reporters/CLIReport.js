@@ -1,6 +1,7 @@
 "use strict";
 const chalk = require("chalk");
 
+exports.name = "CLI";
 exports.reportFrom = reportFrom;
 exports.reportError = error;
 exports.reportWarning = warning;
@@ -15,9 +16,10 @@ const typeMap = {
 /**
  * Prints accesibility results on the CLI
  * @param {Array} results Array of accesibility results
+ * @param {Any} options
  * @returns {void}
  */
-function reportFrom(results) {
+function reportFrom(results, options) {
   if (results.length == 0) {
     console.log(chalk.green("No accessibility issues found"));
     return;

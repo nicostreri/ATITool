@@ -56,6 +56,7 @@ async function runAxe(website, standard, options) {
     return JSON.parse(
       await spawnPromise("axe", [
         website,
+        "--chrome-options=no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage",
         "--show-errors",
         "-j",
         "--tags",
@@ -63,7 +64,7 @@ async function runAxe(website, standard, options) {
       ])
     );
   } catch (e) {
-    throw new Error(`Axe reporter: axe execution fails (${e.message})`);
+    throw new Error(`Axe reporter: axe execution fails (${e})`);
   }
 }
 

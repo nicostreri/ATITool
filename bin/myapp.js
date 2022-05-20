@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 "use strict";
+const fs = require("fs");
+const path = require("path");
 const app = require("../src/app");
-const cliReport = require("../src/reporters/CLIReport");
+const reporters = require("../src/reporters/index");
 const { Command } = require("commander");
 
 const invocationOptions = analyzeArguments();
@@ -22,6 +24,11 @@ function analyzeArguments() {
       "WCAG2AA"
     )
     .option(
+      "-r, --reporter <reporter name>",
+      "Reporter to use as output: CLI, JSON",
+      "CLI"
+    )
+    .option(
       "--no-notice",
       "Remove all problems categorized as notice from the result"
     )
@@ -36,6 +43,21 @@ function analyzeArguments() {
     .requiredOption("-u, --url <url>", "URL to analyze");
   program.parse(process.argv);
   return program.opts();
+}
+
+async function loadConfigurations() {
+  const configFolder = path.join(__dirname, "..", "config");
+  let configurations = {};
+  for (const file of fs.readdirSync(configFolder)) {
+    try {
+      const jsonString = fs.readFileSync(path.join(configFolder, file));
+      const jsonData = JSON.parse(jsonString);
+      configurations[file.replace(".json", "")] = jsonData;
+    } catch (e) {
+      throw new Error(`Configuration reading failed: ${e}`);
+    }
+  }
+  return configurations;
 }
 
 function buildTypeFilter(enable, typeToFilter) {
@@ -56,15 +78,26 @@ function buildTypeFilter(enable, typeToFilter) {
  * Run the accessibility test on the page and generate the results
  */
 async function runApp(options) {
-  app
-    .run(options.url, options.standard, {
-      reporter: cliReport,
+  let reporter = reporters.getReporter(options.reporter);
+  if (reporter == null) {
+    console.error("Critical Error: Reporter Not found");
+    return;
+  }
+
+  return loadConfigurations()
+    .then((configurations) => {
+      return app.run(options.url, options.standard, {
+        reporter: reporter,
+        config: configurations,
+      });
     })
     .then(buildTypeFilter(!options.notice, "notice"))
     .then(buildTypeFilter(!options.warning, "warning"))
     .then(buildTypeFilter(!options.error, "error"))
-    .then(cliReport.reportFrom)
+    .then((results) => {
+      reporter.reportFrom(results, options);
+    })
     .catch((err) => {
-      cliReport.reportError(err.message);
+      reporter.reportError(err.message);
     });
 }

@@ -4,8 +4,9 @@
  */
 const htmlcsRunner = require("./HTMLCodeSniffer/runner");
 const axeRunner = require("./Axe/runner");
+const waveRunner = require("./Wave/runner");
 
-exports.list = [htmlcsRunner, axeRunner];
+exports.list = [htmlcsRunner, axeRunner, waveRunner];
 exports.compatibleWith = compatibleWith;
 
 /**
