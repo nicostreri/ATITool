@@ -84,6 +84,15 @@ async function runApp(options) {
     return;
   }
 
+  const sortOrder = (e1, e2) => {
+    const typeOrder = ["error", "warning", "notice"];
+    const ord1 = typeOrder.indexOf(e1.type);
+    const ord2 = typeOrder.indexOf(e2.type);
+    if (ord1 < ord2) return -1;
+    if (ord1 > ord2) return 1;
+    return 0;
+  };
+
   return loadConfigurations()
     .then((configurations) => {
       return app.run(options.url, options.standard, {
@@ -94,6 +103,7 @@ async function runApp(options) {
     .then(buildTypeFilter(!options.notice, "notice"))
     .then(buildTypeFilter(!options.warning, "warning"))
     .then(buildTypeFilter(!options.error, "error"))
+    .then((results) => results.sort(sortOrder))
     .then((results) => {
       reporter.reportFrom(results, options);
     })
