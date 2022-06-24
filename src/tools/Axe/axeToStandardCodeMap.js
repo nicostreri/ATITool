@@ -6,8 +6,8 @@ const axeToStandardMap = {
     WCAGALL: "[Standard].Principle1.Guideline1_1.1_1_1.H24",
   },
   blink: "[Standard].Principle2.Guideline2_2.2_2_2.F47",
-  "button-name": "",
-  "color-contrast": "[Standard].Principle1.Guideline1_4.1_4_6.G17.Fail",
+  "button-name": "[Standard].Principle4.Guideline4_1.4_1_2.H91.Button.Name",
+  "color-contrast": "[Standard].Principle1.Guideline1_4.1_4_3.G18.Fail",
   "document-title": "[Standard].Principle2.Guideline2_4.2_4_2.H25.1.NoTitleEl",
   "duplicate-id-aria": "[Standard].Principle4.Guideline4_1.4_1_1.F77",
   "duplicate-id": "[Standard].Principle4.Guideline4_1.4_1_1.F77",
@@ -35,6 +35,7 @@ const axeToStandardMap = {
     WCAGALL: "[Standard].Principle2.Guideline2_2.2_2_1.F41.2",
   },
   "select-name": "[Standard].Principle1.Guideline1_3.1_3_1.F68",
+  "link-name": "[Standard].Principle4.Guideline4_1.4_1_2.H91.A.NoContent",
 };
 
 exports.map = function map(code, standard) {
