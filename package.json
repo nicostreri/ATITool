@@ -1,13 +1,13 @@
 {
-  "name": "beca-cin-app",
+  "name": "atitool",
   "version": "1.0.0",
   "bin": {
-    "myapp": "./bin/myapp.js"
+    "atitool": "./bin/atitool.js"
   },
   "description": "Implementation of the architecture for the integration of web accessibility testing tools",
   "main": "src/app.js",
   "scripts": {
-    "start": "node ./bin/myapp.js",
+    "start": "node ./bin/atitool.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,7 +35,7 @@
     "commander": "^7.2.0",
     "lodash": "^4.17.21",
     "mustache": "^4.2.0",
-    "puppeteer": "^10.1.0",
+    "puppeteer": "19.2.0",
     "which": "^2.0.2"
   }
 }
