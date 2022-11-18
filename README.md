@@ -1,4 +1,4 @@
-# Beca CIN App
+# ATITool
 
 ## Docker
 
