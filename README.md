@@ -4,10 +4,10 @@
 
 ### Build image
 ```bash
-docker build -t nicostreri/appcin .
+docker build --pull --no-cache -t nicostreri/atitool .
 ```
 
 ### Run app
 ```bash
-docker run -v $(pwd)/config:/usr/src/app/config nicostreri/appcin -u https://www.google.com
+docker run -v $(pwd)/config:/usr/src/app/config nicostreri/atitool -u https://www.google.com
 ```

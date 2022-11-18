@@ -16,7 +16,7 @@ runApp(invocationOptions);
 function analyzeArguments() {
   const program = new Command();
   program
-    .name("myapp")
+    .name("ATITool")
     .version("0.0.1")
     .option(
       "-s, --standard <standard>",
@@ -25,7 +25,7 @@ function analyzeArguments() {
     )
     .option(
       "-r, --reporter <reporter name>",
-      "Reporter to use as output: CLI, JSON",
+      "Reporter to use as output: CLI, JSON or HTML",
       "CLI"
     )
     .option(
